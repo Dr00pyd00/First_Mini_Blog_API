@@ -2,6 +2,7 @@ from app.core.database import get_db
 from app.schemas.post import PostDataFromDbSchema, PostDataToCreateSchema
 from app.models.post import PostModel
 from app.errors_msg.post import error_post_not_found_by_id
+from app.services.post_service import get_post_by_id_or_404, create_post_service, update_post_service, delete_post_service
 
 from fastapi import APIRouter, Depends,status, Body, Path
 from sqlalchemy.orm import Session
@@ -24,42 +25,24 @@ async def get_all_posts(db:Session=Depends(get_db)):
     posts = db.query(PostModel).all()
     return posts
 
+
 # DETAIL by ID:
 @router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=PostDataFromDbSchema)
 async def post_detail_by_id(
     post_id:int,
     db:Session=Depends(get_db)
 ):
-    post = db.query(PostModel).filter(PostModel.id == post_id).first()
-    if not post:
-        error_post_not_found_by_id(post_id)
-    return post
-    
+    return get_post_by_id_or_404(post_id=post_id, db=db)    
+
+
 # CREATE:
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=PostDataFromDbSchema)
 async def create_post(
     post_fields: Annotated[PostDataToCreateSchema, Body()],
     db: Annotated[Session, Depends(get_db)],
 ):
-    new_post = PostModel(**post_fields.model_dump())
-    db.add(new_post)
-    db.commit()
-    db.refresh(new_post)
+    return create_post_service(data=post_fields, db=db)
 
-    return new_post
-
-# DELETE by ID:
-@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_post_by_id(
-    post_id: Annotated[int, Path()],
-    db: Annotated[Session, Depends(get_db)],
-):
-    post = db.query(PostModel).filter(PostModel.id == post_id).first()
-    if not post:
-        error_post_not_found_by_id(post_id)
-    db.delete(post)
-    db.commit()
-    return
 
 # UPDATE by ID:
 @router.put("/{post_id}", status_code=status.HTTP_200_OK, response_model=PostDataFromDbSchema)
@@ -68,14 +51,13 @@ async def update_post_by_id(
     db: Annotated[Session, Depends(get_db)],
     post_new_fields: Annotated[PostDataToCreateSchema, Body()],
 ):
-    post = db.query(PostModel).filter(PostModel.id == post_id).first()
-    if not post:
-        error_post_not_found_by_id(post_id)
-    
-    for k,v in post_new_fields.model_dump().items():
-        setattr(post,k,v)
-    
-    db.commit()
-    db.refresh(post)
-    return post
+    return update_post_service(post_id=post_id, data=post_new_fields, db=db)
 
+
+# DELETE by ID:
+@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_post_by_id(
+    post_id: Annotated[int, Path()],
+    db: Annotated[Session, Depends(get_db)],
+)->None:
+    delete_post_service(post_id=post_id, db=db)
