@@ -1,12 +1,36 @@
+"""
+posts.py (router)
+
+Ce module expose les endpoints HTTP pour gérer les posts.
+
+Principe :
+- Décrit les routes, méthodes HTTP, status codes et schémas Pydantic.
+- Injecte la session DB et les données via Depends() et Body().
+- Ne contient pas de logique métier : toutes les opérations sont déléguées à post_service.py.
+
+Objectif :
+- Séparer clairement le transport HTTP de la logique métier.
+- Améliorer la lisibilité, la testabilité et la maintenance.
+- Permettre aux développeurs et recruteurs de comprendre immédiatement la structure.
+
+Résumé :
+Router = interface HTTP
+Service = logique métier
+Cette séparation rend le projet professionnel et évolutif.
+"""
+
+
 from app.core.database import get_db
 from app.schemas.post import PostDataFromDbSchema, PostDataToCreateSchema
 from app.models.post import PostModel
-from app.errors_msg.post import error_post_not_found_by_id
 from app.services.post_service import get_post_by_id_or_404, create_post_service, update_post_service, delete_post_service
 
 from fastapi import APIRouter, Depends,status, Body, Path
 from sqlalchemy.orm import Session
 from typing import List, Annotated
+
+
+# Endpoints for FASTAPI / posts:
 
 
 router = APIRouter(
@@ -61,3 +85,5 @@ async def delete_post_by_id(
     db: Annotated[Session, Depends(get_db)],
 )->None:
     delete_post_service(post_id=post_id, db=db)
+
+    

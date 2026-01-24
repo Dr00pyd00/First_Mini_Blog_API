@@ -1,8 +1,32 @@
+"""
+post_service.py
+
+Ce module contient la logique métier pour les posts.
+
+Principe :
+- Toutes les fonctions sont indépendantes de FastAPI.
+- Elles reçoivent les données et la session SQLAlchemy.
+- Elles gèrent les opérations sur la base (CRUD) et les erreurs métier (ex: post non trouvé).
+
+Objectif :
+- Centraliser la logique métier pour éviter les duplications.
+- Faciliter les tests unitaires sans serveur HTTP.
+- Rendre le code réutilisable par plusieurs routes ou scripts.
+
+Résumé :
+Service = métier et base de données. 
+Le router se contente de décrire l'API et d'invoquer le service.
+"""
+
+
 from sqlalchemy.orm import Session
 
 from app.models.post import PostModel
 from app.errors_msg.post import error_post_not_found_by_id
 from app.schemas.post import PostDataToCreateSchema, PostDataFromDbSchema
+
+
+# Service: Gestion CRUD for database = retrieve, select, modify.
 
 
 # Chercher un post sinon renvoyer un 404:
