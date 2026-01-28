@@ -16,9 +16,13 @@ class Post(Base):
         nullable=False,
         server_default=text("NOW()"),
     )
+
+    # FK: on met  "table.colonne" que l'on veut associer.
     user_id = Column(
         Integer,
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable= False,
     )    
+    # pythonic: effet miroire back pop doit correspondre a l'autre table
+    # on associe le CLASS voulu "" pour eviter circulaire.
     owner = relationship("User", back_populates="own_posts")

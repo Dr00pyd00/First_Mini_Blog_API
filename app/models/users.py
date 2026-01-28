@@ -18,4 +18,8 @@ class User(Base):
         nullable=False,
         server_default=text("NOW()")
     )
+
+    # ca correspond au filed contenu dans Post
+    # "all": tout les type de modifs prit en compte
+    # "delete-orphan": supprimer les post dont les User n'existe plus
     own_posts = relationship("Post", back_populates="owner", cascade="all, delete-orphan" )
