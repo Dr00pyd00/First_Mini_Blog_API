@@ -3,9 +3,10 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 
 from app.core.database import Base
+from app.models.mixins.status import StatusMixin
 
 
-class PostLike(Base):
+class PostLike(StatusMixin, Base):
     __tablename__ = "postlikes"
 
     id = Column(Integer, primary_key=True)

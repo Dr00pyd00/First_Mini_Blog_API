@@ -24,6 +24,7 @@ class PostDataFromDbSchema(BaseModel):
     content: str
     published: Optional[bool] = False
     owner: UserDataFromDbSchema
+    status: str
 
     model_config = {"from_attributes":True}
 

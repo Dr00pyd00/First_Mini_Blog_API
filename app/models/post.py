@@ -1,10 +1,13 @@
-from app.core.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 
 
-class Post(Base):
+from app.core.database import Base
+from app.models.mixins.status import StatusMixin
+
+
+class Post(StatusMixin, Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -27,10 +30,10 @@ class Post(Base):
     )    
     # pythonic: effet miroire back pop doit correspondre a l'autre table
     # on associe le CLASS voulu "" pour eviter circulaire.
-    owner = relationship("User", back_populates="own_posts")
+    owner = relationship("User", back_populates="posts")
 
     # pour les likes:
 
     likes = relationship("PostLike", 
-                        back_populates="post_liked",
+                        back_populates="post",
                         cascade="all, delete-orphan")
