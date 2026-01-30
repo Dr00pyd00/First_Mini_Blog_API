@@ -6,9 +6,12 @@ from sqlalchemy.sql.expression import text
 from app.core.database import Base
 from app.models.mixins.status import StatusMixin
 from app.models.mixins.timestamp import TimeStampMixin
+from app.models.mixins.soft_delete import SoftDeleteMixin
 
 
-class Post(TimeStampMixin, StatusMixin, Base):
+
+
+class Post(TimeStampMixin, StatusMixin, SoftDeleteMixin, Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, nullable=False)

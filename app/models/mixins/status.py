@@ -3,9 +3,9 @@ from sqlalchemy import Column, Enum as sqlEnum
 from sqlalchemy.orm import Session
 
 # Mon enum python:
+# pas DELTE dedans car on fait un mixin expres pour
 class StatusEnum(PyEnum):
     ACTIVE = "active"
-    DELETED = "deleted"
     ARCHIVED = "archived"
     SIGNALED = "signaled"
 
@@ -20,6 +20,9 @@ class StatusMixin:
                     )
 
     @classmethod
-    def query_active(cls, session:Session):
+    def query_visible(cls, session:Session):
         """return que les objets actifs"""
-        return session.query(cls).filter(cls.status == StatusEnum.ACTIVE)
+        return session.query(cls).filter(
+            cls.status == StatusEnum.ACTIVE,
+            cls.deleted_at.is_(None),
+            )

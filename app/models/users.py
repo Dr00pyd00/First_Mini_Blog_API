@@ -5,12 +5,13 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP
 from sqlalchemy.sql.expression import text
 from app.models.mixins.timestamp import TimeStampMixin
+from app.models.mixins.soft_delete import SoftDeleteMixin
 
 
 
 
 
-class User(TimeStampMixin, StatusMixin, Base):
+class User(TimeStampMixin, StatusMixin, SoftDeleteMixin, Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False, unique=True)

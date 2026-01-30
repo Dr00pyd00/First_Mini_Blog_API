@@ -5,9 +5,10 @@ from sqlalchemy.sql.expression import text
 from app.core.database import Base
 from app.models.mixins.status import StatusMixin
 from app.models.mixins.timestamp import TimeStampMixin
+from app.models.mixins.soft_delete import SoftDeleteMixin
 
 
-class PostLike(TimeStampMixin, StatusMixin, Base):
+class PostLike(TimeStampMixin, StatusMixin, SoftDeleteMixin, Base):
     __tablename__ = "postlikes"
 
     id = Column(Integer, primary_key=True)
