@@ -99,3 +99,90 @@ alembic revision --autogenerate -m "initial schema"
 ```
 
 => creer une table "alembic_version" dans la db.
+
+
+-------------------------
+
+# Ajout d'un Enum dans Postres avec Alembic
+
+Exemple d'un enum pour un mixin:
+
+### -Creation d'un ENUM
+
+```python
+from enum import Enum as PyEnum
+
+class StatusEnum(PyEnum):
+    ACTIVE = "active"
+    DELETED = "deleted"
+    ARCHIVED = "archived"
+    SIGNALED = "signaled"
+```
+
+### -Creation pour Postgres
+
+==> on lance la revision:
+```bash 
+alembic revision --autogenerate -m'ajout de "status"'
+```
+
+==> NE PAS UPGRADE
+
+### Modification explicite de la version alembic generée:
+
+-creer le type (enum)
+-ajouter la colonne pour que les anciens rows soient remplis
+
+```python
+from alembic import op
+from sqlalchemy.dialects import postgresql
+
+def upgrade():
+    # Création du type PostgreSQL
+    status_enum = postgresql.ENUM("ACTIVE", "DELETED", "ARCHIVED", "SIGNALED", name="status_enum")
+    status_enum.create(op.get_bind(), checkfirst=True)  # check_first: ecrase pas le type si deja present
+
+    # Ajout des colonnes
+    op.add_column(
+        'users',
+        sa.Column(
+            'status',
+            postgresql.ENUM("ACTIVE","DELETED","ARCHIVED","SIGNALED", name="status_enum"),
+            nullable=False,
+            server_default='ACTIVE'    # ca va remplir les rows deja existantes
+        )
+    )
+```
+
+Et pour le downgrade:
+
+```python
+def downgrade():
+    op.drop_column('users', 'status')
+    status_enum = postgresql.ENUM("ACTIVE", "DELETED", "ARCHIVED", "SIGNALED", name="status_enum")
+    status_enum.drop(op.get_bind(), checkfirst=True)
+
+```
+
+
+==> Ici, tout est pret pour le coté db , mais pas en sqlalchemy.
+
+### -Mixin dans SQLAlchemy
+
+```python
+from sqlalchemy import Column
+from sqlalchemy.dialects.postgresql import ENUM as PGEnum
+
+class StatusMixin:
+    status = Column(
+        PGEnum("ACTIVE", "DELETED", "ARCHIVED", "SIGNALED", name="status_enum"),
+        nullable=False,
+        server_default='ACTIVE'
+    )
+```
+
+### Final
+
+```bash 
+alembic upgrade head
+```
