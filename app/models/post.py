@@ -5,20 +5,16 @@ from sqlalchemy.sql.expression import text
 
 from app.core.database import Base
 from app.models.mixins.status import StatusMixin
+from app.models.mixins.timestamp import TimeStampMixin
 
 
-class Post(StatusMixin, Base):
+class Post(TimeStampMixin, StatusMixin, Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
     published = Column(Boolean,nullable=False, server_default=text("TRUE"))
-    created_at = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=text("NOW()"),
-    )
 
     # pour les user_owner:
 

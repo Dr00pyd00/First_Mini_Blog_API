@@ -4,15 +4,15 @@ from sqlalchemy.sql.expression import text
 
 from app.core.database import Base
 from app.models.mixins.status import StatusMixin
+from app.models.mixins.timestamp import TimeStampMixin
 
 
-class PostLike(StatusMixin, Base):
+class PostLike(TimeStampMixin, StatusMixin, Base):
     __tablename__ = "postlikes"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"))
     like_type = Column(String, nullable=False, server_default=text("'Normal'"))
 
 

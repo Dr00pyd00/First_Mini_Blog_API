@@ -4,22 +4,19 @@ from app.models.mixins.status import StatusMixin
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP
 from sqlalchemy.sql.expression import text
+from app.models.mixins.timestamp import TimeStampMixin
 
 
 
 
-class User(StatusMixin, Base):
+
+class User(TimeStampMixin, StatusMixin, Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
     is_active = Column(Boolean, nullable=False, server_default="TRUE")
     email = Column(String, nullable=True, unique= True)
-    created_at = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=text("NOW()")
-    )
 
     # ca correspond au filed contenu dans Post
     # "all": tout les type de modifs prit en compte
