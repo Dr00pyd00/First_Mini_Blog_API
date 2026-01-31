@@ -5,21 +5,15 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# IMPORTER TOUT LES MODELS
 from app.models.users import User
 from app.models.post import Post
 from app.models.posts_likes import PostLike
 
-# IMPROTER BASE de la database pour voir les tables:
-from app.core.database import Base
-
-# IMPORTER l'URL DE SQLALCHEMY
-from app.core.database import SQLALCHEMY_URL
+from app.core.database import Base, SQLALCHEMY_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-# ICI J'IMPLEMENTE "config" : je donne le path
 config.set_main_option("sqlalchemy.url", SQLALCHEMY_URL)
 
 # Interpret the config file for Python logging.
@@ -31,11 +25,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-
-# JE CHANGE CA :
-#target_metadata = None
-# EN CA:
-target_metadata = Base.metadata         # import des tables 
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

@@ -14,9 +14,10 @@ class StatusEnum(PyEnum):
 class StatusMixin:
 
     status = Column(
-                    sqlEnum(StatusEnum, name="status_enum"), 
+                    sqlEnum(StatusEnum, name="status_enum", create_type=False), 
                     default=StatusEnum.ACTIVE, 
-                    nullable=False
+                    nullable=False,
+
                     )
 
     @classmethod

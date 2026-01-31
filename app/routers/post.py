@@ -48,7 +48,12 @@ router = APIRouter(
 # ALL:
 @router.get("/", status_code=status.HTTP_200_OK, response_model= List[PostDataFromDbSchema])
 async def get_all_posts(db:Session=Depends(get_db)):
-    posts = db.query(Post).all()
+    posts = db.query(Post).filter(Post.deleted_at.is_(None)).all()
+
+    # test des likes:
+    for post in posts:
+        likers = [like.user.username for like in post.likes if like.user]
+        print(f"post {post.id} liked by: {likers}")
     return posts
 
 
