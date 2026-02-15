@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from app.core.config import settings
 
 
-SQLALCHEMY_URL = "postgresql://postgres:postgres974@localhost/MyDataBase"
+# SQLALCHEMY_URL = f"postgresql://{settings.postgres_user}:{settings.postgres_password}@{settings.postgres_port}/{settings.postgres_database_name}"
 
-engine = create_engine(SQLALCHEMY_URL)
+engine = create_engine(settings.get_db_url)
 
 SessionLocal = sessionmaker(
     bind=engine,

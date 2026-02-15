@@ -5,10 +5,11 @@ from app.errors_msg.jwt import ERROR_CREDENTIALS_JWT
 from app.models.users import User
 from app.schemas.token import TokenSubDataSchema
 
+from app.core.config import settings 
 
-SECRET_KEY = "patate2000"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 
 
 # Token creation with :

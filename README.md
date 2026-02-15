@@ -4,7 +4,30 @@
 Upgrape the precision of my code.
 
 -Annotated
+## 🚀 Installation
 
+1. Clone le repo
+```bash
+   git clone https://github.com/ton-username/ton-projet.git
+   cd ton-projet
+```
+
+2. Crée ton fichier .env depuis le template
+```bash
+   cp .env.example .env
+```
+
+3. Édite .env avec tes vraies valeurs
+```bash
+   nano .env
+   # Remplace les valeurs "your_*_here"
+```
+
+4. Génère une vraie SECRET_KEY
+```bash
+   python -c "import secrets; print(secrets.token_urlsafe(32))"
+   # Copie le résultat dans .env
+```
 
 ----------------------------------------------------
 
@@ -186,3 +209,67 @@ class StatusMixin:
 ```bash 
 alembic upgrade head
 ```
+
+
+--- 
+
+# .env et dotenv :
+
+Sert a isolé des variables importantes:  
+
+### Creer un fichier .env a la racine:
+Dedans on met les trucs importants:
+
+```bash
+PASSWD="truc"
+```
+Puis on les retrouves:
+
+```python
+import os 
+from dotenv import load_dotenv
+
+# on charge les variables du fichier .env
+load_dotenv()
+
+print(os.getenv("PASSWD")) # existe donc renvoi la valeur 
+print(os.getenv("YASSWD")) # inexistant return None
+
+print(os.environ["PASSWD"]) # existe ou ERROR 
+print(os.environ.get("YASSWD", "truc")) # safer: valeur default
+```
+
+### Attention : en .env **Tout est STRING** .
+
+
+---
+
+## Comment acceder aux variables ? 
+
+> Avec Pydantic-settings
+
+```bash
+pip install pydantic-setting
+```
+
+On creer une class Settings on l'on setup les variables voulu.
+
+```python
+from pydantic_settings import BaseSettings
+from pydantic import Field
+
+class Settings(BaseSettings):
+    # les '...' signifie OBLIGATOIRE:
+    postgres_user : str = Field(..., env="POSTGRES_USER")
+    # on peut mettre une valeur par defaut:
+    postgres_port : str = Field(default="localhost", env="POSTGRES_PORT")
+
+    # config sert a gerer la config de la class:
+    class Config:
+        env_file = ".env"  # dit ou chercher.
+        case_sensitive = False
+
+# crée une instance a utiliser pour mon app:
+settings = Settings() 
+```
+
