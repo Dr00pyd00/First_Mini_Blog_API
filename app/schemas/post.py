@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+
 
 from app.schemas.users import UserDataFromDbSchema
 
@@ -14,8 +15,18 @@ class PostAllDataSchema(BaseModel):
 
 
 class PostDataToCreateSchema(BaseModel):
-    title: str
-    content: str
+    title: str = Field(
+        ...,
+        min_length=1,
+        max_length=200,
+        description="title for post: 1 to 200 characters."
+    )
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=100000,
+        description="content of the post: 1 to 100000 characters."
+    )
     published: Optional[bool] = False
 
 class PostDataFromDbSchema(BaseModel):

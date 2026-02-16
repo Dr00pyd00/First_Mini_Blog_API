@@ -273,3 +273,40 @@ class Settings(BaseSettings):
 settings = Settings() 
 ```
 
+
+---
+
+# Gestion et Validations pydantic avancé:
+
+On met un Field pour etre encore plus precis , puis des foncitons de validations.
+
+```python
+from pydantic import Field, field_validator
+```
+
+Exemple de field:
+```python
+class UserSchema(Basemodel):
+    username: str = Field(
+        ...,  # rend OBLIGATOIRE
+        min_length=1,
+        max_length=56,
+        description="name for user: 1 to 56 char."
+    )
+```
+
+Ensuite on utilise **field_validatoir** pour cibler un champ:
+```python
+import re # sert pour regex
+
+@filed_validator('username')
+@classmethod # subtil mais: c'est une verification AVANT la creation de l'instance donc on utilise un classmethod car l'instance est pas encore créé.
+def username_alphanumeric(cls, name)->str:
+    if re.match(r'^[a-zA-Z0-9_]+$', name) is None:
+        # re.match compare le regex et la valeur de la func:
+            # si ca marche : renvoi un objet regex
+            # si marche PAS : renvoi None
+        raise ValueError("Username need to be alphanumeric")
+    return name
+```
+
