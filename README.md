@@ -430,3 +430,78 @@ Ce qu'il se passe:
 - Un client est creer avec un override pour get_db donc les routes du code sont utilisables sans problemes
 - Tout est **clean** a la fin car ce sont des generateur qui reset tout apres leurs appels
 
+
+
+# Les LOGS:
+
+5 niveaux:
+- DEBUG -> details tech pour debugger (verbeux)
+- INFO -> Info generals 
+- WARNING -> Chose anormal mais pas grave
+- ERROR -> Erreur mais l'app continue
+- CRITICAL -> Erreur GRAVE l'app va crash
+
+## Organisation:
+
+Il y a un systeme a respecter:
+- creer un logger ( avec un name)
+- creer un/plusieurs handlers -> la ou vont les logs (console ou fichiers)
+- creer pour chaque hander : **format** + **level** 
+- bind les handlers au logger
+
+### rotations de fichiers:
+Facile avec logging.handlers import RotatingFileHandler.
+
+## Exemple:
+
+```python 
+import logging
+from logging.handlers import RotatingFileHandler
+
+# ETAPE 1: Creation du logger lui meme
+logger = logging.getLogger(name="Mon Nom")
+
+    # on peut definir un niveau dés maintenant et affiné dans chaque handler
+logger.setLevel(logging.DEBUG)
+
+
+# ETAPE 2: Les Handlers
+# On va en faire 2, un en console et l'autre en fichier
+
+### Console:
+console_handler = logging.StreamHandler()
+    # le niveau
+console_handler.setLevel(logging.DEBUG)
+    # le formatage :
+console_handler_format = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(console_handler_format)
+
+
+### Un Fichier special:
+file_error_handler = RotatingFileHandler(
+    filename="truclog",
+    maxBytes=1024,  
+    backupCount=10, # nombre de fichiers archives possible.
+)
+    # le niveau
+file_error_handler.setLevel(logging.ERROR)
+    # le formatage:
+file_error_handler_format = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+file_error_handler.setFormatter(file_error_handler_format)
+
+
+# ETAPE 3: on bind les handlers au logger:
+logger.addHandler(console_handler)
+logger.addHandler(file_error_handler)
+
+
+# On peut tester des logs :
+    
+logger.debug("Message de debug")
+logger.info("Message d'info")
+logger.warning("Message de warning")
+logger.error("Message d'erreur")
+logger.critical("Message critique")
+```
+
+

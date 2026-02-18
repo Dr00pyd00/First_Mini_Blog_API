@@ -24,7 +24,7 @@ def test_create_post_with_token(client:TestClient):
 
     # maintenant je dois login et avoir un token:
     login_response = client.post(
-        url="/login/",
+        url="/login",
         data={
             "username":"testuser",
             "password":"password123"
@@ -87,7 +87,7 @@ def test_delete_not_existing_post(client:TestClient):
     
     # maintenant je dois login et avoir un token:
     login_response = client.post(
-        url="/login/",
+        url="/login",
         data={
             "username":"testuser",
             "password":"password123"
@@ -133,7 +133,7 @@ def test_delete_existing_post(client:TestClient):
     
     # maintenant je dois login et avoir un token:
     login_response = client.post(
-        url="/login/",
+        url="/login",
         data={
             "username":"testuser",
             "password":"password123"

@@ -27,7 +27,7 @@ from app.models.users import User
 from app.services.post_service import get_post_by_id_or_404, create_post_service, update_post_service, delete_post_service
 from app.dependencies.jwt import get_current_user
 
-from fastapi import APIRouter, Depends,status, Body, Path
+from fastapi import APIRouter, Depends, Query,status, Body, Path
 from sqlalchemy.orm import Session
 from typing import List, Annotated
 
@@ -45,10 +45,28 @@ router = APIRouter(
 #===============================#
 
 
-# ALL:
+# ALL: avec pagination:
 @router.get("/", status_code=status.HTTP_200_OK, response_model= List[PostDataFromDbSchema])
-async def get_all_posts(db:Session=Depends(get_db)):
-    posts = db.query(Post).filter(Post.deleted_at.is_(None)).all()
+async def get_all_posts(
+    db: Annotated[Session, Depends(get_db)],
+    skip: Annotated[int, Query(ge=0, description="Number of posts to skip ( Pagination )")] = 0,
+    limit: Annotated[int, Query(ge=1, le=100, description="Maximum of posts to return ( max: 100)")] = 10,
+    ):
+    """
+    Retrieve posts with pagination.
+    
+    - skip: Number of posts to skip (default: 0)
+    - limit: Max posts to return (default: 10, max: 100)
+    """
+
+    posts = (
+        db.query(Post)
+        .filter(Post.deleted_at.is_(None))
+        .order_by(Post.created_at.desc())   # du plus recent au plus vieux.
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
     # test des likes:
     for post in posts:
