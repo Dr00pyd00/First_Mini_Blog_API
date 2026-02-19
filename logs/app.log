@@ -148,3 +148,5 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-02-19 20:07:27 - httpx - INFO - HTTP Request: GET http://testserver/users/999999999 "HTTP/1.1 404 Not Found"
 2026-02-19 20:08:43 - app.main - INFO - 🚀 Fastapi App started!
 2026-02-19 20:08:43 - app.main - INFO - ✅ Routers charged!
+2026-02-19 20:26:19 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 20:26:19 - app.main - INFO - ✅ Routers charged!
