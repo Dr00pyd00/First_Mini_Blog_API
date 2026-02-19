@@ -4,7 +4,9 @@ from app.services.users_service import get_user_by_id_or_404
 from app.services.post_service import get_post_by_id_or_404
 from app.models.posts_likes import PostLike
 from app.errors_msg.posts_likes import ERROR_LIKE_ALREADY_EXIST, ERROR_LIKE_DOESNT_EXIST
+from app.core.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 
 
@@ -31,6 +33,7 @@ def create_post_like_service(
         ).first()
 
     if existing_like:
+        logger.warning(f"Attempt by User ID:{user_id} to Like Post ID:{post_id} but already liked.")
         raise ERROR_LIKE_ALREADY_EXIST
 
     like = PostLike(
@@ -40,6 +43,7 @@ def create_post_like_service(
     db.add(like)
     db.commit()
     db.refresh(like)
+    logger.info(f"Post ID:{post_id} liked by User ID:{user_id}.")
 
     return like
 
@@ -61,10 +65,12 @@ def delete_post_like_service(
         ).first()
 
     if not existing_like:
+        logger.warning(f"Attempt by User ID:{user_id} to UnLike Post ID:{post_id} Post NOT liked.")
         raise ERROR_LIKE_DOESNT_EXIST
 
     db.delete(existing_like)
     db.commit()
+    logger.warning(f"Attempt by User ID:{user_id} to Like Post ID:{post_id} but already liked.")
     return
    
     

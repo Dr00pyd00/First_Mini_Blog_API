@@ -67,7 +67,8 @@ def setup_logging() -> None:
 
         # sqlalchemy
     logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
-
+        # bruits de bcrypt qui deconne a cause de la version...
+    logging.getLogger("passlib").setLevel(logging.ERROR)
 
 
 

@@ -8,7 +8,9 @@ from app.errors_msg.users import error_username_taken, error_user_not_found_by_i
 from app.security.pw_hashing import verify_password
 from app.security.jwt import create_access_token
 from app.schemas.token import TokenBearerCreatedSchema, TokenSubDataSchema
+from app.core.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 
 
@@ -28,6 +30,7 @@ def get_user_by_id_or_404(id:int, db:Session)->User:
     """
     user = db.query(User).filter(User.id == id).first()
     if not user:
+        logger.warning(f"User ID:{id} not found.")
         error_user_not_found_by_id(id=id)
     return user
 
@@ -54,6 +57,7 @@ def create_user_service(
     # check if username alreaady exist:
     existing_user = db.query(User).filter(User.username == data.username).first()
     if existing_user:
+        logger.warning(f"Attempt to create new User but username:{existing_user.username} already taken.")
         error_username_taken(username=data.username)
     # hash the password:
     user_dict = data.model_dump()
@@ -62,6 +66,7 @@ def create_user_service(
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    logger.info(f"New User created ID:{new_user.id}")
     return new_user
 
 
@@ -85,12 +90,15 @@ def auth_user_service(
     """
     user = db.query(User).filter(User.username == user_creds.username).first()
     if not user:
+        logger.warning(f"Login failed: unknown username '{user_creds.username}'")
         raise ERROR_USER_INVALID_CREDENTIALS
     if not verify_password(user_creds.password, user.password):
+        logger.warning(f"Login failed: wrong password for User ID:{user.id} ({user.username})")
         raise ERROR_USER_INVALID_CREDENTIALS
     
     # si tout est ok:
     token = create_access_token(TokenSubDataSchema(sub=str(user.id))) 
+    logger.info(f"User ID:{user.id} authenticated and token created.")
 
     return {"access_token":token,
             "token_type":"bearer"}

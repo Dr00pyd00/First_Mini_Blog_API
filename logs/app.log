@@ -10,3 +10,55 @@
 2026-02-18 22:39:51 - app.main - INFO - je test juste __name__: app.main
 2026-02-18 22:44:55 - app.main - INFO - 🚀 Fastapi App started!
 2026-02-18 22:44:55 - app.main - INFO - ✅ Routers charged!
+2026-02-19 17:45:43 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 17:45:43 - app.main - INFO - ✅ Routers charged!
+2026-02-19 17:52:03 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 17:52:03 - app.main - INFO - ✅ Routers charged!
+2026-02-19 17:54:50 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 17:54:50 - app.main - INFO - ✅ Routers charged!
+2026-02-19 17:55:18 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/luna/Python/FASTAPI/SecondApp/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-19 17:55:59 - app.services.post_service - INFO - Post ID:42 created by user ID:2.
+2026-02-19 17:56:25 - app.services.post_service - INFO - Post ID:43 created by user ID:2.
+2026-02-19 17:56:51 - app.services.post_service - INFO - Post ID:42 updated.
+2026-02-19 17:57:03 - app.services.post_service - WARNING - User ID:2 tried to delete Post ID:1 of an other User.
+2026-02-19 17:57:15 - app.services.post_service - WARNING - User ID:2 tried to delete Post ID:1 of an other User.
+2026-02-19 17:57:16 - app.services.post_service - WARNING - Pot ID:142 not found.
+2026-02-19 17:57:32 - app.services.post_service - INFO - Post ID:42 soft deleted by User ID:2.
+2026-02-19 17:59:53 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 17:59:53 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:08:57 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:08:57 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:09:16 - app.services.users_service - WARNING - Attempt to create new User but username:sasa already taken.
+2026-02-19 18:09:40 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/luna/Python/FASTAPI/SecondApp/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-19 18:11:33 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:11:33 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:11:39 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/luna/Python/FASTAPI/SecondApp/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-19 18:11:39 - app.services.users_service - INFO - New User created ID:6
+2026-02-19 18:12:59 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:12:59 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:15:07 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:15:07 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:15:13 - app.services.users_service - WARNING - Attempt to create new User but username:sasasa already taken.
+2026-02-19 18:16:25 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:16:25 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:17:56 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:17:56 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:25:55 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:25:55 - app.main - INFO - ✅ Routers charged!
+2026-02-19 18:26:44 - app.main - INFO - 🚀 Fastapi App started!
+2026-02-19 18:26:44 - app.main - INFO - ✅ Routers charged!

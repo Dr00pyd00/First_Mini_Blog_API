@@ -25,6 +25,10 @@ from app.models.post import Post
 from app.errors_msg.post import error_post_not_found_by_id, ERROR_ALREADY_SOFT_DELETED, ERROR_TRY_RESTORE_UNDELETED_POST, ERROR_NOT_CURRENT_USER_POST
 from app.schemas.post import PostDataToCreateSchema 
 
+from app.core.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 
 # Service: Gestion CRUD for database = retrieve, select, modify.
 
@@ -50,6 +54,7 @@ def get_post_any_state_by_id_or_404(post_id:int, db:Session)->Post :
         Post.id == post_id,
         ).first()
     if not post:
+        logger.warning(f"Post ID:{post_id} not found.")
         error_post_not_found_by_id(id=post_id)
     return post
 
@@ -73,6 +78,7 @@ def get_post_by_id_or_404(post_id:int, db:Session)->Post :
         Post.deleted_at.is_(None)
         ).first()
     if not post:
+        logger.warning(f"Pot ID:{post_id} not found.")
         error_post_not_found_by_id(id=post_id)
     return post
 
@@ -92,6 +98,7 @@ def create_post_service(
     db.add(post)
     db.commit()
     db.refresh(post)
+    logger.info(f"Post ID:{post.id} created by user ID:{user_id}.")
     return post
 
 # Update post:
@@ -105,6 +112,7 @@ def update_post_service(
         setattr(post,k,v)
     db.commit()
     db.refresh(post)
+    logger.info(f"Post ID:{post_id} updated.")
     return post
 
 # Delete post:
@@ -115,11 +123,13 @@ def delete_post_service(
 )->None:
     post = get_post_by_id_or_404(post_id=post_id, db=db)
     if post.user_id != user_id:
+        logger.warning(f"User ID:{user_id} tried to delete Post ID:{post_id} of an other User.")
         raise ERROR_NOT_CURRENT_USER_POST
 
     post.soft_delete() 
     db.flush()
     db.commit()
+    logger.info(f"Post ID:{post_id} soft deleted by User ID:{user_id}.")
 
 
 # Restor post soft deleted:
@@ -129,8 +139,10 @@ def restore_post_service(
 )->None:
     post = get_post_any_state_by_id_or_404(post_id=post_id, db=db)
     if not post or post.deleted_at is None:
+        logger.warning(f"Attempt to restore non-deleted Post ID:{post_id}")
         raise ERROR_TRY_RESTORE_UNDELETED_POST
 
     post.restore()
     db.commit()
+    logger.info(f"Post ID:{post_id} restored.")
     
