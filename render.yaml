@@ -9,6 +9,7 @@ services:
     name: fastapi_blog
     runtime: docker
     plan: free
+    preDeployCommand: alembic upgrade head
 
     envVars:
       - key: POSTGRES_HOST
