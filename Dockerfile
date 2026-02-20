@@ -14,4 +14,6 @@ RUN pip install -r requirements.txt --no-cache-dir
 COPY . .
 
 # commandes a exectuer 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+COPY start.sh .
+RUN chmod +x start.sh
+CMD ["./start.sh"] 
