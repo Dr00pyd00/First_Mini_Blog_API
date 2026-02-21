@@ -1,6 +1,6 @@
 # Mini Blog API
 
-A REST API for a blog application : wit FastAPI and PostgreSQL.  
+A REST API for a blog application : with FastAPI and PostgreSQL.  
 **[Live_demo](https://fastapi-blog-hneb.onrender.com)**
 
 ## Tech Stack
@@ -10,15 +10,15 @@ A REST API for a blog application : wit FastAPI and PostgreSQL.
 - SQLAlchemy (orm)
 - Alembic (migrations/updates models)
 - JWT (authentication)
-- Docker (deploiement)
+- Docker (deployment)
 - Pytest 
 
 ## Features
 
 ### Models
 - Soft delete system
-- status (active, archiver, signaled)
-- ROle-based control (ie: only owner can delete a post)
+- status (active, archived, signaled)
+- Role-based control (ie: only owner can delete a post)
 
 #### Users
 - registration
@@ -41,5 +41,32 @@ A REST API for a blog application : wit FastAPI and PostgreSQL.
 
 ### Setup
 
-1. Clone the repositry
+1. Clone the repository
 ```bash 
+git clone https://github.com/Dr00pyd00/First_Mini_Blog_API
+cd First_Mini_Blog_API
+```
+
+2. Create '.env' file
+```bash
+cp .env.example .env
+# fill this with yours values 
+```
+
+3. Start Docker containers
+```bash
+docker compose up --build
+```
+
+4. Run Alembic migrations for tables in database
+```bash 
+docker compose exec api alembic upgrade head
+```
+
+5. API working on `http://localhost:8000`
+
+## Documentation
+
+Interactive and testable doc at:
+- Swagger :`https://fastapi-blog-hneb.onrender.com/docs`
+- ReDoc `https://fastapi-blog-hneb.onrender.com/redoc`
